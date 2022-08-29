@@ -17,6 +17,13 @@ const dotenv_1 = require("dotenv");
 require("express-async-errors");
 const path_1 = __importDefault(require("path"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
+// USE V2
+const cloudinary_1 = require("cloudinary");
+cloudinary_1.v2.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
 const express_1 = __importDefault(require("express"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
@@ -28,7 +35,7 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 // middleware
 app.use(express_1.default.json());
-app.use((0, express_fileupload_1.default)());
+app.use((0, express_fileupload_1.default)({ useTempFiles: true }));
 app.use(express_1.default.static(path_1.default.resolve(__dirname, "./public")));
 // routes
 app.use("/api/v1/products", product_route_1.default);

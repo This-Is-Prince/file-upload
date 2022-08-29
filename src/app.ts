@@ -2,7 +2,14 @@ import { config } from "dotenv";
 config();
 import "express-async-errors";
 import path from "path";
-import fileUpload from 'express-fileupload'
+import fileUpload from "express-fileupload";
+// USE V2
+import { v2 as cloudinary } from "cloudinary";
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME as string,
+  api_key: process.env.CLOUD_API_KEY as string,
+  api_secret: process.env.CLOUD_API_SECRET as string,
+});
 
 import express from "express";
 import errorHandlerMiddleware from "./middleware/error-handler";
@@ -16,7 +23,7 @@ const port = process.env.PORT || 3000;
 
 // middleware
 app.use(express.json());
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true }));
 app.use(express.static(path.resolve(__dirname, "./public")));
 
 // routes
