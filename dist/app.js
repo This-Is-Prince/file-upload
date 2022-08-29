@@ -15,18 +15,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 require("express-async-errors");
+const path_1 = __importDefault(require("path"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const express_1 = __importDefault(require("express"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
 const db_1 = __importDefault(require("./db"));
+const product_route_1 = __importDefault(require("./routes/product.route"));
 // app
 const app = (0, express_1.default)();
 // port
 const port = process.env.PORT || 3000;
+// middleware
+app.use(express_1.default.json());
+app.use((0, express_fileupload_1.default)());
+app.use(express_1.default.static(path_1.default.resolve(__dirname, "./public")));
 // routes
-app.get("/", (req, res) => {
-    res.send("home");
-});
+app.use("/api/v1/products", product_route_1.default);
 // error middleware
 app.use(error_handler_1.default);
 app.use(not_found_1.default);
